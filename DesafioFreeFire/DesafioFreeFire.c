@@ -67,7 +67,7 @@ void inserirItem() {
 }
 
 //Função para procurar o item dentro da mochila pelo nome
-int buscaLinear(char nome[]) {
+int buscarItens(char nome[]) {
     for (int i = 0; i < contador; i++) {
         if (strcmp(mochila[i].nome, nome) == 0) { //strcmp para comparar nomes
             return i;
@@ -86,7 +86,7 @@ void removerItem() {
     fgets(nome, 30, stdin);
     nome[strcspn(nome, "\n")] = '\0';
 
-    int pos = buscaLinear(nome);
+    int pos = buscarItens(nome);
 
     if (pos == -1) {
         printf("Item não encontrado!\n");
@@ -106,7 +106,7 @@ void mostrarMenu() {
     printf(" ---Mochila de Sobrevivente--- \n");
     printf("Itens na Mochila: %d/%d\n\n", contador, CAPACIDADE_MAX); //Representa e atualiza os itens
 
-    printf("1. Adicionar Item (Loot)\n");
+    printf("1. Adicionar Item (munição, armas, kit médico e ferramentas)\n");
     printf("2. Remover Item\n");
     printf("3. Listar Itens na Mochila\n");
     printf("0. Sair\n");
@@ -126,7 +126,7 @@ int main() {
         switch (opcao) {
             case 1: inserirItem(); break;
             case 2: removerItem(); break;
-            case 3: listarItens(); break;
+            case 3: buscarItens(); break;
             case 0: printf("Saindo do sistema \n"); break;
             default: printf("Opção inválida! \n");
         }
