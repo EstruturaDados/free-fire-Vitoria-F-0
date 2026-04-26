@@ -1,31 +1,35 @@
+//Desafio Nível Novato - Código da Ilha: Edição Free Fire.
+//Objetivo: simular um inventário de itens coletados em jogo.
+//Mochila inicial de loot: cadastrar, remover, listar e buscar itens.
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #define CAPACIDADE_MAX 10
 
-//Definição do struct Item
+//Definição do struct Item da mochila
 typedef struct {
     char nome[30];
-    char tipo[20];
+    char tipo[20]; //Arma, munição, cura, colete, etc)
     int quantidade;
 } Item;
 
 //Vetor mochila
 Item mochila[CAPACIDADE_MAX];
-int contador = 0; //Base para controlar o espaço dentro da mochila
+int contador = 0; //Controla quantos itens foram adicionados/removidos
 
 //Necessário para limpar o buffer
 void limparBuffer() {
     while (getchar() != '\n');
 }
 
-//Tabela para listar itens
+//Tabela para listar e exibir todos os itens atuais na mochila
 void listarItens() {
 
     printf("\n--- Itens da Mochila (%d/%d) ---\n", contador, CAPACIDADE_MAX);
-    printf("------------------- ---------------- ---------------------\n");
+    printf("----------------------------------------------------------\n");
     printf("Nome               | Tipo           | Quantidade\n");
-    printf("------------------- ---------------- ---------------------\n");
+    printf("----------------------------------------------------------\n");
 
     //Verificar se a mochila está vazia
     if (contador == 0) {
@@ -39,18 +43,17 @@ void listarItens() {
                mochila[i].nome,
                mochila[i].tipo,
                mochila[i].quantidade);
+        printf("----------------------------------------------------------\n");
     }
 }
 
-//Adicionar item
+//Adicionar item na mochila
 void inserirItem() {
     //Verificar se a capacidade máxima foi atingida
     if (contador >= CAPACIDADE_MAX) {
         printf("\nMochila cheia!\n");
         return;
     }
-
-    limparBuffer();
 
     printf("Nome: ");
     fgets(mochila[contador].nome, 30, stdin); //fgets para aceitar nomes compostos
@@ -66,27 +69,25 @@ void inserirItem() {
     contador++;
 }
 
-//Função para procurar o item dentro da mochila pelo nome
-int buscarItens(char nome[]) {
+//Função para procurar o item pelo nome
+int buscarItem(char nome[]) {
     for (int i = 0; i < contador; i++) {
         if (strcmp(mochila[i].nome, nome) == 0) { //strcmp para comparar nomes
             return i;
         }
     }
-    return -1;
+    return -1; //Se não encontrar
 }
 
-//Remover item
+//Remover item da mochila pelo nome
 void removerItem() {
     char nome[30];
-
-    limparBuffer();
 
     printf("Digite o nome do item para remover: ");
     fgets(nome, 30, stdin);
     nome[strcspn(nome, "\n")] = '\0';
 
-    int pos = buscarItens(nome);
+    int pos = buscarItem(nome);
 
     if (pos == -1) {
         printf("Item não encontrado!\n");
@@ -103,10 +104,12 @@ void removerItem() {
 
 //Menu para o usuário
 void mostrarMenu() {
-    printf(" ---Mochila de Sobrevivente--- \n");
+    printf("-----------------------------------------");
+    printf("\n ---Mochila de Sobrevivente--- \n");
+    printf("-----------------------------------------\n");
     printf("Itens na Mochila: %d/%d\n\n", contador, CAPACIDADE_MAX); //Representa e atualiza os itens
 
-    printf("1. Adicionar Item (munição, armas, kit médico e ferramentas)\n");
+    printf("1. Adicionar Item (Loot)\n");
     printf("2. Remover Item\n");
     printf("3. Listar Itens na Mochila\n");
     printf("0. Sair\n");
@@ -122,12 +125,19 @@ int main() {
     do {
         mostrarMenu();
         scanf("%d", &opcao);
+        limparBuffer();//Limpa o que sobrou no buffer para o próximo pedido
 
         switch (opcao) {
-            case 1: inserirItem(); break;
-            case 2: removerItem(); break;
-            case 3: buscarItens(); break;
-            case 0: printf("Saindo do sistema \n"); break;
+            case 1: inserirItem(); 
+            listarItens(); 
+            break;
+            case 2: removerItem(); 
+            listarItens(); 
+            break;
+            case 3: listarItens(); 
+            break;
+            case 0: printf("Saindo do sistema \n"); 
+            break;
             default: printf("Opção inválida! \n");
         }
 
